@@ -1,3 +1,19 @@
+document.getElementsByClassName = function (className) {
+  var todosElementos = document.getElementsByTagName("*");
+  var resultados = [];
+  var elemento;
+
+  for (var i = 0; (elemento = todosElementos[i]) != null; i++) {
+    var elementoClass = elemento.className;
+
+    if (elementoClass && elementoClass.indexOf(className) != -1) {
+      resultados.push(elemento);
+    }
+  }
+
+  return resultados;
+};
+
 function moneyTextToFloat(text) {
   var cleanText = text.replace("R$ ", "").replace(",", ".");
   return parseFloat(cleanText);
@@ -37,15 +53,13 @@ function calculateTotalProducts() {
   return totalProdutos;
 }
 
-function quantidadeMudou() {
-  writeTotal(calculateTotalProducts());
-}
-
 function onDocumentLoad() {
   var textEdits = document.getElementsByClassName("quantity");
 
   for (var i = 0; i < textEdits.length; i++) {
-    textEdits[i].onchange = quantidadeMudou;
+    textEdits[i].onchange = function () {
+      writeTotal(calculateTotalProducts());
+    };
   }
 }
 
