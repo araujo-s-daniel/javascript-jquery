@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p class="par">Primeira linha</p>
+    <p class="impar">Segunda linha</p>
+    <input type="text" id="texto" class="par" value="um texto qualquer">
+
+    <script src="jquery-2.0.0.min.js"></script>
+    <script>
+        $("p").css("background-color", "lightgreen");
+
+        $(".par").css("background-color", "lightblue");
+
+        $("#texto").css("color", "white").val("esse é o novo texto");
+    </script>
+</body>
+
+</html>

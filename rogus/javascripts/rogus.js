@@ -1,19 +1,3 @@
-document.getElementsByClassName = function (className) {
-  var todosElementos = document.getElementsByTagName("*");
-  var resultados = [];
-  var elemento;
-
-  for (var i = 0; (elemento = todosElementos[i]) != null; i++) {
-    var elementoClass = elemento.className;
-
-    if (elementoClass && elementoClass.indexOf(className) != -1) {
-      resultados.push(elemento);
-    }
-  }
-
-  return resultados;
-};
-
 function moneyTextToFloat(text) {
   var cleanText = text.replace("R$ ", "").replace(",", ".");
   return parseFloat(cleanText);
@@ -26,41 +10,31 @@ function floatToMoneyText(value) {
 }
 
 function readTotal() {
-  var total = document.getElementById("total");
-  return moneyTextToFloat(total.innerHTML);
+  var total = $("#total").text();
+  return moneyTextToFloat(total);
 }
 
 function writeTotal(value) {
-  var total = document.getElementById("total");
-  total.innerHTML = floatToMoneyText(value);
+  var text = floatToMoneyText(value);
+  $("#total").text(text);
 }
 
 function calculateTotalProducts() {
-  var produtos = document.getElementsByClassName("produto");
-  var totalProdutos = 0;
+  var produtos = $(".produto");
+  var total = 0;
 
-  for (var pos = 0; pos < produtos.length; pos++) {
-    var priceElements = produtos[pos].getElementsByClassName("price");
-    var priceText = priceElements[0].innerHTML;
-    var price = moneyTextToFloat(priceText);
-    var qtyElements = produtos[pos].getElementsByClassName("quantity");
-    var qtyText = qtyElements[0].value;
-    var quantity = moneyTextToFloat(qtyText);
-    var subtotal = quantity * price;
-    totalProdutos += subtotal;
-  }
+  $(produtos).each(function (pos, produto) {
+    var $produto = $(produto);
+    var quantity = moneyTextToFloat($produto.find(".quantity").val());
+    var price = moneyTextToFloat($produto.find(".price").text());
+    total += quantity * price;
+  });
 
-  return totalProdutos;
+  return total;
 }
 
-function onDocumentLoad() {
-  var textEdits = document.getElementsByClassName("quantity");
-
-  for (var i = 0; i < textEdits.length; i++) {
-    textEdits[i].onchange = function () {
-      writeTotal(calculateTotalProducts());
-    };
-  }
-}
-
-window.onload = onDocumentLoad;
+$(function () {
+  $(".quantity").change(function () {
+    writeTotal(calculateTotalProducts());
+  });
+});
